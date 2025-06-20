@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали Тендера - {{ tender.title }}</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #eef1f5; color: #333; line-height: 1.6; }
+        .container { max-width: 900px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 20px; font-size: 2em; }
+        h2 { color: #34495e; margin-top: 30px; margin-bottom: 15px; font-size: 1.5em; border-bottom: 1px solid #e0e0e0; padding-bottom: 8px; }
+        .detail-item { margin-bottom: 15px; }
+        .detail-item strong { display: block; margin-bottom: 5px; color: #555; font-size: 0.9em; }
+        .detail-item span { font-size: 1.1em; color: #333; }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover { background-color: #0056b3; }
+        .probability-high { color: #28a745; font-weight: bold; }
+        .probability-medium { color: #ffc107; font-weight: bold; }
+        .probability-low { color: #dc3545; font-weight: bold; }
+        .details-link { color: #007bff; text-decoration: none; font-weight: 500; }
+        .details-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Детали Тендера</h1>
+        {% if tender %}
+            <div class="detail-item">
+                <strong>Название тендера:</strong> <span>{{ tender.title }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>НМЦК:</strong> <span>{{ "{:,.2f} руб.".format(tender.nmck) }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Вероятность успеха:</strong>
+                <span class="{% if tender.probability is not none and tender.probability >= 0.8 %}probability-high{% elif tender.probability is not none and tender.probability >= 0.5 %}probability-medium{% else %}probability-low{% endif %}">
+                    {{ "{:.2%}".format(tender.probability if tender.probability is not none else 0) }}
+                </span>
+            </div>
+            <div class="detail-item">
+                <strong>Рекомендации:</strong> <span>{{ tender.recommendations }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Заказчик:</strong> <span>{{ tender.customer_name }} (ИНН: {{ tender.customer_inn }})</span>
+            </div>
+            <div class="detail-item">
+                <strong>Дата публикации:</strong> <span>{{ tender.publish_date }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Источник:</strong> <span>{{ tender.source }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Ссылка на детали:</strong> <a href="{{ tender.details_url }}" target="_blank" class="details-link">{{ tender.details_url }}</a>
+            </div>
+
+            <h2>Дополнительные признаки</h2>
+            <div class="detail-item">
+                <strong>МСП:</strong> <span>{{ tender.is_sme }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Срок контракта (дни):</strong> <span>{{ tender.contract_duration_days }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Предоплата:</strong> <span>{{ tender.payment_type_prepayment }}</span>
+                {% if tender.prepayment_percentage != 'N/A' %}
+                (Процент: {{ tender.prepayment_percentage }}%)
+                {% endif %}
+            </div>
+            <div class="detail-item">
+                <strong>Отсрочка платежа (дни):</strong> <span>{{ tender.payment_deferral_days }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>АЗС Газпромнефть:</strong> <span>{{ tender.azs_gazpromneft_required }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>АЗС Лукойл:</strong> <span>{{ tender.azs_lukoil_required }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>АЗС Роснефть:</strong> <span>{{ tender.azs_rosneft_required }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>АЗС Башнефть:</strong> <span>{{ tender.azs_bashneft_required }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>АЗС Татнефть:</strong> <span>{{ tender.azs_tatneft_required }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>АЗС Сургутнефтегаз:</strong> <span>{{ tender.azs_surgutneftegaz_required }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>АЗС Нефтегазхолдинг:</strong> <span>{{ tender.azs_neftegazholding_required }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>АЗС Иркутскнефтепродукт:</strong> <span>{{ tender.azs_irkutskoil_required }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>АЗС Альянс:</strong> <span>{{ tender.azs_alians_required }}</span>
+            </div>
+             <div class="detail-item">
+                <strong>Исходные условия контракта:</strong> <span>{{ tender.contract_terms_raw }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Исходные условия оплаты:</strong> <span>{{ tender.payment_conditions_raw }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Исходные данные по АЗС:</strong> <span>{{ tender.azs_network_raw }}</span>
+            </div>
+
+            <a href="/" class="button">Вернуться к списку тендеров</a>
+        {% else %}
+            <p>Детали тендера не найдены.</p>
+            <a href="/" class="button">Вернуться к списку тендеров</a>
+        {% endif %}
+    </div>
+</body>
+</html>

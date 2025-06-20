@@ -1,0 +1,13 @@
+requests
+beautifulsoup4
+pandas
+sqlalchemy
+python-dotenv
+scikit-learn
+joblib
+flask
+python-telegram-bot
+psycopg2-binary
+numpy
+six
+urllib3
